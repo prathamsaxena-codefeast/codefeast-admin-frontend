@@ -1,0 +1,14 @@
+{
+  "menuItems": [
+    {
+      "title": "Newsletter Subscribers",
+      "url": "/newsletter",
+      "icon": "Mail"
+    },
+    {
+      "title": "Contacts",
+      "url": "/contacts",
+      "icon": "Users"
+    }
+  ]
+}
