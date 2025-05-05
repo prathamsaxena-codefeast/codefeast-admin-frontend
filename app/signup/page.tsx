@@ -21,15 +21,15 @@ export default function AuthPage() {
               priority
             />
           </Link>
-          <div className="flex-grow">
-            <h1 className="text-4xl md:text-5xl font-bold mb-8">
-              Welcome to <br />
-              Codefeast Admin
-            </h1>
-            <p className="text-lg md:text-xl opacity-90 max-w-md text-primary-foreground/80">
-              Manage your platform efficiently with our admin tools.
-            </p>
-          </div>
+           <div className="flex-grow">
+                                  <h1 className="text-4xl md:text-5xl font-bold mb-8 text-background">
+                                      Welcome to <br />
+                                      Codefeast Admin
+                                  </h1>
+                                  <p className="text-lg md:text-xl opacity-90 max-w-md text-primary-foreground/80">
+                                      Manage your platform efficiently with our admin tools.
+                                  </p>
+                              </div>
           <div className="text-sm text-primary-foreground/70 mt-8">
             © 2025 Codefeast. All rights reserved.
           </div>

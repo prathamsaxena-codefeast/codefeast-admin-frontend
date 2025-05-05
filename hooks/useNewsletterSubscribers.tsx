@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import api from "@/lib/api";
 
 export interface Subscriber {
-  id: string;
+  _id: string;
   email: string;
   createdAt: string;
 }

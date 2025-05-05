@@ -61,7 +61,7 @@ export default function NewsLetter() {
           </TableHeader>
           <TableBody>
             {paginatedSubscribers.map((subscriber) => (
-              <TableRow key={subscriber.id}>
+              <TableRow key={subscriber._id}>
                 <TableCell>{subscriber.email}</TableCell>
                 <TableCell>{new Date(subscriber.createdAt).toLocaleString()}</TableCell>
               </TableRow>

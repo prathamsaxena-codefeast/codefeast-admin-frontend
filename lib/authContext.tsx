@@ -52,7 +52,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { data } = await api.post("/user/login", { email, password });
       setUser(data.user);
       setTokens(data.accessToken, data.refreshToken);
-      router.push("/dashboard");
+      router.push("/newsletter");
     } catch (error: unknown) {
       if (error instanceof Error && "response" in error) {
         const errorResponse = (error as { response?: { data?: { message?: string } } }).response;

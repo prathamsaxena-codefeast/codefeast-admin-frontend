@@ -36,16 +36,16 @@ export default function ContactsPage() {
       <div className="rounded-md border">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>First Name</TableHead>
-              <TableHead>Last Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Phone Number</TableHead>
-              <TableHead>Subject</TableHead>
-              <TableHead>Message</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Time</TableHead>
-            </TableRow>
+          <TableRow>
+      <TableHead className="whitespace-nowrap">First Name</TableHead>
+      <TableHead className="whitespace-nowrap">Last Name</TableHead>
+      <TableHead className="whitespace-nowrap">Email</TableHead>
+      <TableHead className="whitespace-nowrap">Phone Number</TableHead>
+      <TableHead className="whitespace-nowrap">Subject</TableHead>
+      <TableHead className="whitespace-nowrap">Message</TableHead>
+      <TableHead className="whitespace-nowrap">Status</TableHead>
+      <TableHead className="whitespace-nowrap">Time</TableHead>
+    </TableRow>
           </TableHeader>
           <TableBody>
             {paginatedContacts.map((contact) => (

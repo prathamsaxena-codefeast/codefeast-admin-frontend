@@ -9,7 +9,7 @@ export default function AuthPage() {
     return (
         <div className="min-h-screen grid lg:grid-cols-2 bg-background">
             {/* Left Section - Branding */}
-            <div className="relative hidden lg:flex flex-col text-white text-shadow-xs p-12 bg-background">
+            <div className="relative hidden lg:flex flex-col  text-shadow-xs p-12 bg-blue-900">
                 <div className="relative z-10 max-w-[520px] flex flex-col h-full mt-24">
                     <Link href="/" className="mb-12">
                         <Image
@@ -22,7 +22,7 @@ export default function AuthPage() {
                         />
                     </Link>
                     <div className="flex-grow">
-                        <h1 className="text-4xl md:text-5xl font-bold mb-8">
+                        <h1 className="text-4xl md:text-5xl font-bold mb-8 text-background">
                             Welcome to <br />
                             Codefeast Admin
                         </h1>
