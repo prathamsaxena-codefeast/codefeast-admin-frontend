@@ -1,3 +1,4 @@
+"use client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RecentLoans } from './recent-loans';
@@ -5,7 +6,8 @@ import { LoanTermsChart } from './loan-terms-charts';
 import { DollarSign, Users, Building } from 'lucide-react';
 import Image from 'next/image';
 import { useAuth } from "@/lib/authContext";
-import useEffect from "react"
+import { useEffect } from "react";
+import { useRouter } from 'next/navigation';
 export default function DashboardPage() {
     const {user}=useAuth();
     const router=useRouter();

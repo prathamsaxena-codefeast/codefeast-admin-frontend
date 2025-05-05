@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
 import api from "@/lib/api";
 
+// Define the Contact type
 export interface Contact {
-  id: string;
-  name: string;
+  _id: string; // Use _id instead of id
+  firstName: string;
+  lastName: string;
   email: string;
+  phoneNumber: string;
+  subject: string;
   message: string;
   status: string;
+  createdAt: string;
+  updatedAt?: string; // Optional property
 }
 
 export const useContacts = () => {

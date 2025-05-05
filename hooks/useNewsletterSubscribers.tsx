@@ -4,7 +4,7 @@ import api from "@/lib/api";
 export interface Subscriber {
   id: string;
   email: string;
-  subscribedAt: string;
+  createdAt: string;
 }
 
 export const useNewsletterSubscribers = () => {

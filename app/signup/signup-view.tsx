@@ -14,28 +14,31 @@ export function SignupView() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("admin"); 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
   const { setTokens } = useAuth();
 
 const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const { data } = await api.post("/user/signup", { name, email, password, role });
-      setTokens(data.accessToken, data.refreshToken); // Store tokens in AuthContext
-      setSuccess(data.message);
-      setError("");
-      setTimeout(() => {
-        router.push("/login"); // Redirect to login page after successful signup
-      }, 2000);
-    } catch (err: any) {
-      console.log("Error:", err);
-      setError(err.response?.data?.message || "An error occurred during signup");
-      setSuccess("");
+  e.preventDefault();
+  try {
+    const { data } = await api.post("/user/signup", { name, email, password, role: "admin" });
+    setTokens(data.accessToken, data.refreshToken); // Store tokens in AuthContext
+    setSuccess(data.message);
+    setError("");
+    setTimeout(() => {
+      router.push("/login"); // Redirect to login page after successful signup
+    }, 2000);
+  } catch (err: unknown) {
+    if (err instanceof Error && "response" in err) {
+      const errorResponse = (err as { response?: { data?: { message?: string } } }).response;
+      setError(errorResponse?.data?.message || "An error occurred during signup");
+    } else {
+      setError("An unexpected error occurred during signup");
     }
-  };
+    setSuccess("");
+  }
+};
 
   return (
     <div className="w-full max-w-md space-y-8 p-6 rounded-lg border border-border dark:border-border bg-card dark:bg-card shadow-sm">
@@ -70,7 +73,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           </Label>
           <Input
             id="email"
-            placeholder="example@divyanshi.com"
+            placeholder="example@gmail.com"
             required
             type="email"
             value={email}

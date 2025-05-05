@@ -3,12 +3,11 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Input } from '@/components/ui/input';
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useContacts } from '@/hooks/useContacts';
 
 export default function ContactsPage() {
-  const { contacts, loading, error } = useContacts();
+  const { contacts, loading, error } = useContacts(); // Use the Contact type
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 

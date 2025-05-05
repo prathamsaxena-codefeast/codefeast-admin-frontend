@@ -28,9 +28,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const router = useRouter();
 
-  // Retrieve the access token from sessionStorage
   const getAccessToken = () => {
-    return sessionStorage.getItem("accessToken");
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("accessToken");
+    }
+    return null;
   };
 
   const setTokens = (accessToken: string, refreshToken: string) => {
@@ -45,25 +47,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
   };
 
-  const login = async (email: string, password: string) => {
+    const login = async (email: string, password: string) => {
     try {
       const { data } = await api.post("/user/login", { email, password });
       setUser(data.user);
       setTokens(data.accessToken, data.refreshToken);
       router.push("/dashboard");
-    } catch (error: any) {
-      console.error("Login failed:", error.response?.data?.message || error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error && "response" in error) {
+        const errorResponse = (error as { response?: { data?: { message?: string } } }).response;
+        console.error("Login failed:", errorResponse?.data?.message || error.message);
+      } else {
+        console.error("Login failed:", error);
+      }
       throw error;
     }
   };
-
+  
   const logout = async () => {
     try {
       await api.post("/user/logout");
       clearTokens();
       router.push("/login");
-    } catch (error: any) {
-      console.error("Logout failed:", error.response?.data?.message || error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error && "response" in error) {
+        const errorResponse = (error as { response?: { data?: { message?: string } } }).response;
+        console.error("Logout failed:", errorResponse?.data?.message || error.message);
+      } else {
+        console.error("Logout failed:", error);
+      }
     }
   };
 

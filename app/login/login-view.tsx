@@ -14,12 +14,17 @@ export function LoginView() {
   const [error, setError] = useState("");
   const { login } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await login(email, password);
-    } catch (err: any) {
-      setError(err.response?.data?.message || "An error occurred during login");
+    } catch (err: unknown) {
+      if (err instanceof Error && "response" in err) {
+        const errorResponse = (err as { response?: { data?: { message?: string } } }).response;
+        setError(errorResponse?.data?.message || "An error occurred during login");
+      } else {
+        setError("An unexpected error occurred during login");
+      }
     }
   };
   return (
@@ -43,7 +48,7 @@ export function LoginView() {
           </Label>
           <Input
             id="email"
-            placeholder="example@divyanshi.com"
+            placeholder="example@gmail.com"
             required
             type="email"
             onChange={(e) => setEmail(e.target.value)}
