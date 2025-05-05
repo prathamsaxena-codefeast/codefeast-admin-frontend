@@ -3,9 +3,8 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Filter } from 'lucide-react';
+import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useContacts } from '@/hooks/useContacts';
 
 export default function ContactsPage() {
@@ -35,40 +34,31 @@ export default function ContactsPage() {
         </div>
       </div>
 
-      <div className="flex items-center py-4 gap-2">
-        <Input placeholder="Filter contacts..." className="max-w-sm" />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
-              <Filter className="w-4 h-4 mr-2" />
-              Filter
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Name</DropdownMenuItem>
-            <DropdownMenuItem>Email</DropdownMenuItem>
-            <DropdownMenuItem>Status</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
       <div className="rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
+              <TableHead>First Name</TableHead>
+              <TableHead>Last Name</TableHead>
               <TableHead>Email</TableHead>
+              <TableHead>Phone Number</TableHead>
+              <TableHead>Subject</TableHead>
               <TableHead>Message</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Time</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {paginatedContacts.map((contact) => (
-              <TableRow key={contact.id}>
-                <TableCell>{contact.name}</TableCell>
+              <TableRow key={contact._id}>
+                <TableCell>{contact.firstName}</TableCell>
+                <TableCell>{contact.lastName}</TableCell>
                 <TableCell>{contact.email}</TableCell>
+                <TableCell>{contact.phoneNumber}</TableCell>
+                <TableCell>{contact.subject}</TableCell>
                 <TableCell>{contact.message}</TableCell>
                 <TableCell>{contact.status}</TableCell>
+                <TableCell>{new Date(contact.createdAt).toLocaleString()}</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import api, { setAuthInterceptor } from "./api";
+import api from "./api";
 import { useRouter } from "next/navigation";
 
 interface User {
@@ -18,23 +18,29 @@ interface AuthContextType {
   logout: () => Promise<void>;
   setTokens: (accessToken: string, refreshToken: string) => void;
   clearTokens: () => void;
+  getAccessToken: () => string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const router = useRouter();
 
+  // Retrieve the access token from sessionStorage
+  const getAccessToken = () => {
+    return sessionStorage.getItem("accessToken");
+  };
+
   const setTokens = (accessToken: string, refreshToken: string) => {
-    setAccessToken(accessToken);
+    console.log("Setting AccessToken:", accessToken); // Debugging
+    sessionStorage.setItem("accessToken", accessToken); // Save accessToken in sessionStorage
     setRefreshToken(refreshToken);
   };
 
   const clearTokens = () => {
-    setAccessToken(null);
+    sessionStorage.removeItem("accessToken"); // Remove accessToken from sessionStorage
     setRefreshToken(null);
     setUser(null);
   };
@@ -62,19 +68,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    setAuthInterceptor(() => accessToken); // Dynamically inject the access token
-  }, [accessToken]);
+    // Dynamically add the Authorization header to each request
+    const interceptor = api.interceptors.request.use(
+      (config) => {
+        const accessToken = getAccessToken(); // Retrieve accessToken from sessionStorage
+        if (accessToken) {
+          console.log("Adding AccessToken to Request:", accessToken); // Debugging
+          config.headers.Authorization = `Bearer ${accessToken}`;
+        }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+
+    // Cleanup the interceptor when the component unmounts
+    return () => {
+      api.interceptors.request.eject(interceptor);
+    };
+  }, []); // Run this effect once when the component mounts
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        accessToken,
+        accessToken: getAccessToken(),
         refreshToken,
         login,
         logout,
         setTokens,
         clearTokens,
+        getAccessToken,
       }}
     >
       {children}
