@@ -1,32 +1,35 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
-import { useAuth } from "@/lib/authContext";
+import { signIn } from "next-auth/react";
 
 export function LoginView() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { login } = useAuth();
+  const router = useRouter();
 
-    const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await login(email, password);
-    } catch (err: unknown) {
-      if (err instanceof Error && "response" in err) {
-        const errorResponse = (err as { response?: { data?: { message?: string } } }).response;
-        setError(errorResponse?.data?.message || "An error occurred during login");
-      } else {
-        setError("An unexpected error occurred during login");
-      }
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    if (result?.error) {
+      setError(result.error);
+    } else {
+      router.push("/dashboard");
     }
   };
+
   return (
     <div className="w-full max-w-md space-y-8 p-6 rounded-lg border border-border dark:border-border bg-card dark:bg-card shadow-sm">
       <div className="space-y-3 text-center">
@@ -51,6 +54,7 @@ export function LoginView() {
             placeholder="example@gmail.com"
             required
             type="email"
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="border-input dark:border-input focus:border-primary dark:focus:border-primary focus:ring-primary dark:focus:ring-primary"
           />
@@ -69,7 +73,7 @@ export function LoginView() {
               required
               type={showPassword ? "text" : "password"}
               value={password}
-              onChange={(e)=>setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               className="border-input dark:border-input focus:border-primary dark:focus:border-primary focus:ring-primary dark:focus:ring-primary pr-10"
             />
@@ -83,7 +87,8 @@ export function LoginView() {
             </button>
           </div>
         </div>
-        {error && <p className='text-sm text-red-500'>{error}</p>}
+
+        {error && <p className="text-sm text-red-500">{error}</p>}
 
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -116,7 +121,7 @@ export function LoginView() {
         </Button>
 
         <div className="text-center text-sm text-muted-foreground dark:text-muted-foreground">
-          Don&apos;t have an account?
+          Don&apos;t have an account?{" "}
           <a
             href="/signup"
             className="font-medium text-primary dark:text-primary hover:text-primary/90 dark:hover:text-primary/90"

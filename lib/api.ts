@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getSession } from "next-auth/react";
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -7,26 +8,19 @@ const api = axios.create({
 
 api.interceptors.request.use(
   async (config) => {
-    // Fetch the access token from sessionStorage
-    const accessToken = sessionStorage.getItem("accessToken");
-    console.log("Interceptor AccessToken:", accessToken); // Debugging
+    const session = await getSession();
 
-    // Add the Authorization header if the access token exists
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
+    // Add the Authorization header if the session has an access token
+    if (session?.accessToken) {
+      config.headers.Authorization = `Bearer ${session.accessToken}`;
     }
 
-    // Add the server token to the headers
-    const serverToken = process.env.NEXT_PUBLIC_AUTH_TOKEN;
-    if (serverToken) {
-      config.headers["server"] = serverToken;
-    } else {
-      console.warn("Warning: NEXT_PUBLIC_AUTH_TOKEN is not set in the environment variables.");
-    }
+    // Add the server header for backend validation
+    config.headers.server = process.env.NEXT_PUBLIC_AUTH_TOKEN;
 
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-export default api;
+export default api; // Export the `api` instance as the default export

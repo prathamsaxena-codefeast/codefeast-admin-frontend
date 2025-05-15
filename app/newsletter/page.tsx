@@ -1,30 +1,28 @@
-'use client';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Filter } from 'lucide-react';
-import { useNewsletterSubscribers } from '@/hooks/useNewsletterSubscribers';
+export default async function NewsLetter() {
+  // Fetch the session
+  const session = await getServerSession(authOptions);
 
-export default function NewsLetter() {
-  const { subscribers, loading, error } = useNewsletterSubscribers();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  const paginatedSubscribers = subscribers.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage
-  );
-
-  if (loading) {
-    return <div className="p-6">Loading...</div>;
+  // Redirect to login if the user is not authenticated
+  if (!session) {
+    redirect("/login");
   }
 
-  if (error) {
-    return <div className="p-6 text-red-500">{error}</div>;
+  // Fetch subscribers data from your backend
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/newsletter`, {
+    headers: {
+      Authorization: `Bearer ${session.accessToken}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch subscribers");
   }
+
+  const subscribers = await response.json();
 
   return (
     <div className="p-6">
@@ -35,106 +33,23 @@ export default function NewsLetter() {
         </div>
       </div>
 
-      <div className="flex items-center py-4 gap-2">
-        <Input placeholder="Filter subscribers..." className="max-w-sm" />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
-              <Filter className="w-4 h-4 mr-2" />
-              Filter
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Email</DropdownMenuItem>
-            <DropdownMenuItem>Date Subscribed</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
       <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Email</TableHead>
-              <TableHead>Subscribed At</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {paginatedSubscribers.map((subscriber) => (
-              <TableRow key={subscriber._id}>
-                <TableCell>{subscriber.email}</TableCell>
-                <TableCell>{new Date(subscriber.createdAt).toLocaleString()}</TableCell>
-              </TableRow>
+        <table className="w-full">
+          <thead>
+            <tr>
+              <th className="px-4 py-2 text-left">Email</th>
+              <th className="px-4 py-2 text-left">Subscribed At</th>
+            </tr>
+          </thead>
+          <tbody>
+            {subscribers.map((subscriber: any) => (
+              <tr key={subscriber._id}>
+                <td className="px-4 py-2">{subscriber.email}</td>
+                <td className="px-4 py-2">{new Date(subscriber.createdAt).toLocaleString()}</td>
+              </tr>
             ))}
-          </TableBody>
-        </Table>
-      </div>
-
-      <div className="flex items-center justify-between px-2 py-4">
-        <div className="text-sm text-muted-foreground">
-          {paginatedSubscribers.length} of {subscribers.length} subscriber(s) displayed.
-        </div>
-        <div className="flex items-center space-x-6 lg:space-x-8">
-          <div className="flex items-center space-x-2">
-            <p className="text-sm font-medium">Rows per page</p>
-            <label htmlFor="rowsPerPage" className="sr-only">
-              Rows per page
-            </label>
-            <select
-              id="rowsPerPage"
-              value={rowsPerPage}
-              onChange={(e) => setRowsPerPage(Number(e.target.value))}
-              className="h-8 w-[70px] rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-            >
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="30">30</option>
-              <option value="40">40</option>
-              <option value="50">50</option>
-            </select>
-          </div>
-          <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-            Page {currentPage} of {Math.ceil(subscribers.length / rowsPerPage)}
-          </div>
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setCurrentPage(1)}
-              disabled={currentPage === 1}
-            >
-              <ChevronFirst className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-              disabled={currentPage === 1}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() =>
-                setCurrentPage((prev) =>
-                  Math.min(Math.ceil(subscribers.length / rowsPerPage), prev + 1)
-                )
-              }
-              disabled={currentPage === Math.ceil(subscribers.length / rowsPerPage)}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setCurrentPage(Math.ceil(subscribers.length / rowsPerPage))}
-              disabled={currentPage === Math.ceil(subscribers.length / rowsPerPage)}
-            >
-              <ChevronLast className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
+          </tbody>
+        </table>
       </div>
     </div>
   );

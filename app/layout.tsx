@@ -7,7 +7,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { ThemeProvidersContext } from "@/provider/theme-provider";
 import { Header } from "@/components/header";
 import { usePathname } from "next/navigation";
-
+import { SessionProvider } from "next-auth/react";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -32,7 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <AuthProvider>
+        <SessionProvider>
           <ThemeProvidersContext>
             <SidebarProvider>
               {hideSidebarAndHeader ? (
@@ -51,7 +51,7 @@ export default function RootLayout({
               )}
             </SidebarProvider>
           </ThemeProvidersContext>
-        </AuthProvider>
+        </SessionProvider>
       </body>
     </html>
   );

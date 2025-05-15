@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import api from "@/lib/api";
-import { useAuth } from "@/lib/authContext";
+import { signIn } from "next-auth/react";
 
 export function SignupView() {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,28 +17,32 @@ export function SignupView() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
-  const { setTokens } = useAuth();
-
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  try {
-    const { data } = await api.post("/user/signup", { name, email, password, role: "admin" });
-    setTokens(data.accessToken, data.refreshToken); // Store tokens in AuthContext
-    setSuccess(data.message);
-    setError("");
-    setTimeout(() => {
-      router.push("/login"); // Redirect to login page after successful signup
-    }, 2000);
-  } catch (err: unknown) {
-    if (err instanceof Error && "response" in err) {
-      const errorResponse = (err as { response?: { data?: { message?: string } } }).response;
-      setError(errorResponse?.data?.message || "An error occurred during signup");
-    } else {
-      setError("An unexpected error occurred during signup");
-    }
-    setSuccess("");
-  }
-};
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      try {
+          const { data } = await api.post("/user/signup", { name, email, password });
+  
+          setSuccess(data.message);
+          setError("");
+  
+          // Automatically log the user in after signup
+          const result = await signIn("credentials", {
+              redirect: false,
+              email,
+              password,
+          });
+  
+          if (result?.error) {
+              setError("Signup successful, but login failed. Please log in manually.");
+              router.push("/login");
+          } else {
+              router.push("/dashboard");
+          }
+      } catch (err: any) {
+          setError(err.response?.data?.message || "An error occurred during signup");
+          setSuccess("");
+      }
+  };
 
   return (
     <div className="w-full max-w-md space-y-8 p-6 rounded-lg border border-border dark:border-border bg-card dark:bg-card shadow-sm">
