@@ -26,6 +26,7 @@ export async function POST(request: Request) {
         message: data.message,
         token: data.token,
         role: data.role,
+        username: data.username,
       },
       { status: 200 }
     );

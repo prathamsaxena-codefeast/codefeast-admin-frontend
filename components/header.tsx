@@ -4,22 +4,24 @@ import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useTheme } from 'next-themes';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, LogOut } from 'lucide-react';
 import { checkRoute } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/lib/authContext';
 
 export function Header() {
     const { setTheme } = useTheme();
     const pathname = usePathname();
+    const { logout, user } = useAuth();
 
-    // Hide the header on specific routes
     if (checkRoute(pathname)) return null;
+    console.log(user)
 
     return (
         <div className="sticky top-0 z-50 flex h-14 w-full items-center justify-between gap-4 border-b bg-background px-4 lg:gap-6">
             {/* Left Section */}
             <div className="flex items-center gap-2">
-                <h1 className="text-lg font-semibold">Welcome Admin !</h1>
+                <h1 className="text-lg font-semibold">Welcome {user?.username || 'Admin'}!</h1>
             </div>
 
             {/* Right Section */}
@@ -41,6 +43,17 @@ export function Header() {
 
                 <Button variant="ghost" size="icon" className="h-9 w-9">
                     DF
+                </Button>
+
+                {/* Logout Button */}
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-9"
+                    onClick={logout}
+                    title="Logout"
+                >
+                    <LogOut className="h-5 w-5" />
                 </Button>
             </div>
         </div>

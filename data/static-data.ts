@@ -2,10 +2,9 @@ import { LayoutDashboard, Users, Building2, ShieldCheck, CircleDotDashed, ListTo
 
 export const sidebarData = {
     
-  
     lead: [
         {
-            title: 'Inquiries',
+            title: 'Contacts',
             icon: ContactRound,
             url: '/contacts'
         },

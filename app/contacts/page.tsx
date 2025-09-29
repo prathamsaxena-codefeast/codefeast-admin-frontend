@@ -7,7 +7,7 @@ import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-rea
 import { useContacts } from '@/hooks/useContacts';
 
 export default function ContactsPage() {
-  const { contacts, loading, error } = useContacts(); // Use the Contact type
+  const { contacts, loading, error } = useContacts(); 
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 

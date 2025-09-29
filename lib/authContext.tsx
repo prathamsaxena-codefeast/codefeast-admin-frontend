@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import api from "./api";
@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 interface User {
   email: string;
   role: string;
+  username: string;
 }
 
 interface AuthContextType {
@@ -38,9 +39,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string) => {
     try {
       const res = await api.post("/auth/login", { email, password });
-      const { token, role } = res.data;
+      console.log('Response data:', res.data);
+      const { token, role, username } = res.data;
 
-      const userData: User = { email, role };
+      const userData: User = { email, role, username };
 
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(userData));
@@ -48,7 +50,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(userData);
       setToken(token);
 
-      router.push("/"); 
+      router.push("/");
     } catch (error: any) {
       console.error("Login failed", error);
       throw error;
