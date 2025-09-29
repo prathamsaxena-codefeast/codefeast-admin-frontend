@@ -1,11 +1,20 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { LoginView } from './login-view';
+import { redirect } from 'next/navigation';
 
 export default function AuthPage() {
+
+    useEffect(() => {
+        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+        if (token) {
+            redirect('/contacts');
+        }    
+    },[]);
+
     return (
         <div className="min-h-screen grid lg:grid-cols-2 bg-background">
             <div className="relative hidden lg:flex flex-col p-12 overflow-hidden">
