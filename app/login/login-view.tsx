@@ -28,16 +28,12 @@ export function LoginView() {
     }
   };
   return (
-    <div className="w-full max-w-md space-y-8 p-6 rounded-lg border border-border dark:border-border bg-card dark:bg-card shadow-sm">
-      <div className="space-y-3 text-center">
-        <h1 className="text-2xl md:text-3xl font-bold text-foreground dark:text-foreground">
-          Welcome back
-        </h1>
-        <p className="text-muted-foreground dark:text-muted-foreground">
-          Enter your credentials to sign in to your account
-        </p>
-      </div>
-
+    <div className="w-full max-w-md">
+      <div className="rounded-2xl border bg-card text-card-foreground shadow-xl p-8 md:p-10">
+        <div className="space-y-2 text-center mb-6">
+          <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">Sign in</h1>
+          <p className="text-sm md:text-base text-muted-foreground">Enter your credentials to access the dashboard</p>
+        </div>
       <form className="space-y-6" onSubmit={handleSubmit}>
         <div className="space-y-2">
           <Label
@@ -52,7 +48,7 @@ export function LoginView() {
             required
             type="email"
             onChange={(e) => setEmail(e.target.value)}
-            className="border-input dark:border-input focus:border-primary dark:focus:border-primary focus:ring-primary dark:focus:ring-primary"
+            className="h-11 border-input dark:border-input focus-visible:ring-2 focus-visible:ring-primary"
           />
         </div>
 
@@ -71,11 +67,11 @@ export function LoginView() {
               value={password}
               onChange={(e)=>setPassword(e.target.value)}
               placeholder="Enter your password"
-              className="border-input dark:border-input focus:border-primary dark:focus:border-primary focus:ring-primary dark:focus:ring-primary pr-10"
+              className="h-11 pr-10 border-input dark:border-input focus-visible:ring-2 focus-visible:ring-primary"
             />
             <button
               type="button"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground dark:text-muted-foreground hover:text-foreground dark:hover:text-foreground"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
@@ -102,7 +98,7 @@ export function LoginView() {
           </div>
           <a
             href="#"
-            className="text-sm font-medium text-primary dark:text-primary hover:text-primary/90 dark:hover:text-primary/90"
+            className="text-sm font-medium text-primary hover:text-primary/90"
           >
             Forgot password?
           </a>
@@ -110,21 +106,22 @@ export function LoginView() {
 
         <Button
           type="submit"
-          className="w-full bg-primary dark:bg-primary hover:bg-primary/90 dark:hover:bg-primary/90 text-primary-foreground dark:text-primary-foreground"
+          className="w-full h-11 text-primary-foreground"
         >
           Sign In
         </Button>
 
-        <div className="text-center text-sm text-muted-foreground dark:text-muted-foreground">
+        <div className="text-center text-sm text-muted-foreground">
           Don&apos;t have an account?
           <a
             href="/signup"
-            className="font-medium text-primary dark:text-primary hover:text-primary/90 dark:hover:text-primary/90"
+            className="ml-1 font-medium text-primary hover:text-primary/90"
           >
             Sign up
           </a>
         </div>
       </form>
+      </div>
     </div>
   );
 }
