@@ -5,19 +5,30 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
-import { useAuth } from "@/lib/authContext";
+ 
 
 export function LoginView() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { login } = useAuth();
+ 
 
     const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(email, password);
+      setError("");
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data?.message || "Login request failed");
+        return;
+      }
+      console.log("Echoed credentials:", data);
     } catch (err: unknown) {
       if (err instanceof Error && "response" in err) {
         const errorResponse = (err as { response?: { data?: { message?: string } } }).response;
@@ -108,7 +119,7 @@ export function LoginView() {
           type="submit"
           className="w-full h-11 text-primary-foreground"
         >
-          Sign In
+          Log In
         </Button>
 
         <div className="text-center text-sm text-muted-foreground">
