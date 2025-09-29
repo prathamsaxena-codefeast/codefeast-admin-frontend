@@ -1,26 +1,12 @@
 import { NextResponse } from "next/server";
+import { backendApi } from "@/lib/api";
+import { AxiosError } from "axios";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    const { data } = await backendApi.post("/auth/login", body);
 
-    const backendRes = await fetch(
-      `http://localhost:8000/api/auth/login`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      }
-    );
-
-    const data = await backendRes.json();
-
-    if (!backendRes.ok) {
-      return NextResponse.json(
-        { message: data?.message || "Login failed" },
-        { status: backendRes.status }
-      );
-    }
     return NextResponse.json(
       {
         message: data.message,
@@ -32,6 +18,14 @@ export async function POST(request: Request) {
     );
   } catch (error) {
     console.error("Login API Error:", error);
+
+    if (error instanceof AxiosError && error.response) {
+      return NextResponse.json(
+        { message: error.response.data?.message || "Login failed" },
+        { status: error.response.status }
+      );
+    }
+
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

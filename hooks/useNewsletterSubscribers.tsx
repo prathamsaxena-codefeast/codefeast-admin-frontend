@@ -16,7 +16,7 @@ export const useNewsletterSubscribers = () => {
     const fetchSubscribers = async () => {
       try {
         const { data } = await api.get("/newsletter");
-        setSubscribers(data);
+        setSubscribers(Array.isArray(data.subscribers) ? data.subscribers : []);
       } catch (err: any) {
         setError(err.response?.data?.message || "Failed to fetch subscribers");
       } finally {

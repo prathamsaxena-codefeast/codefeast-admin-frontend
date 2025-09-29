@@ -24,7 +24,7 @@ export const useContacts = () => {
     const fetchContacts = async () => {
       try {
         const { data } = await api.get("/contact");
-        setContacts(data);
+        setContacts(data.contacts || []); 
       } catch (err: any) {
         setError(err.response?.data?.message || "Failed to fetch contacts");
       } finally {
