@@ -4,20 +4,7 @@ import { AxiosError } from "axios";
 
 export async function GET(request: Request) {
   try {
-    const token = request.headers.get("authorization");
-
-    if (!token) {
-      return NextResponse.json(
-        { message: "No token provided" },
-        { status: 401 }
-      );
-    }
-
-    const { data } = await backendApi.get("/auth/me", {
-      headers: {
-        Authorization: token,
-      },
-    });
+    const { data } = await backendApi.get("/auth/me");
 
     return NextResponse.json(
       {

@@ -1,39 +1,28 @@
 import { useEffect, useState } from "react";
 import api from "@/lib/api";
-
-// Define the Contact type
-export interface Contact {
-  _id: string; // Use _id instead of id
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-  subject: string;
-  message: string;
-  status: string;
-  createdAt: string;
-  updatedAt?: string; // Optional property
-}
+import type { Contact } from "@/types/contact";
 
 export const useContacts = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchContacts = async () => {
-      try {
-        const { data } = await api.get("/contact");
-        setContacts(data.contacts || []); 
-      } catch (err: any) {
-        setError(err.response?.data?.message || "Failed to fetch contacts");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchContacts = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const { data } = await api.get("/contact");
+      setContacts(data.contacts || []);
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Failed to fetch contacts");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchContacts();
   }, []);
 
-  return { contacts, loading, error };
+  return { contacts, loading, error, refetch: fetchContacts };
 };

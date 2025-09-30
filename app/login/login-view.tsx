@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/authContext";
 import { AxiosError } from "axios";
+import Link from "next/link";
 
 export function LoginView() {
   const { login } = useAuth();
@@ -108,9 +109,9 @@ export function LoginView() {
                 Remember me
               </Label>
             </div>
-            <a href="#" className="text-sm font-medium text-primary hover:text-primary/90">
+            <Link href="#" className="text-sm font-medium text-primary hover:text-primary/90">
               Forgot password?
-            </a>
+            </Link>
           </div>
 
           <Button
@@ -130,9 +131,9 @@ export function LoginView() {
 
           <div className="text-center text-sm text-muted-foreground">
             Don&apos;t have an account?
-            <a href="/signup" className="ml-1 font-medium text-primary hover:text-primary/90">
+            <Link href="/signup" className="ml-1 font-medium text-primary hover:text-primary/90">
               Sign up
-            </a>
+            </Link>
           </div>
         </form>
       </div>

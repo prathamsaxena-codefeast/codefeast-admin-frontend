@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "@/lib/api";
-
-export interface Subscriber {
-  _id: string;
-  email: string;
-  createdAt: string;
-}
+import type { Subscriber } from "@/types/newsletter";
 
 export const useNewsletterSubscribers = () => {
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);

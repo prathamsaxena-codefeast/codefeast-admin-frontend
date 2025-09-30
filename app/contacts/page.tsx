@@ -6,21 +6,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useContacts } from '@/hooks/useContacts';
-
-interface Contact {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-  subject: string;
-  message: string;
-  status: string;
-  createdAt: string;
-}
+import type { Contact } from '@/types/contact';
+import Loading from '@/components/loading';
 
 export default function ContactsPage() {
-  const { contacts, loading, error } = useContacts();
+  const { contacts, loading, error, refetch } = useContacts();
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
@@ -37,19 +27,22 @@ export default function ContactsPage() {
     currentPage * rowsPerPage
   );
 
-  useEffect(() => {
-    if (!loading && contactsArray.length > 0) {
-      console.log('Fetched contacts:', contactsArray);
-    }
-  }, [contactsArray, loading]);
-
   const handleRowClick = (contact: Contact) => {
     setSelectedContact(contact);
     setIsDialogOpen(true);
   };
 
-  if (loading) return <div className="p-6">Loading...</div>;
-  if (error) return <div className="p-6 text-red-500">{error}</div>;
+  if (loading) return <Loading message="Loading contacts..." />;
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="mb-4 rounded-md border border-destructive/30 bg-destructive/5 p-4 text-destructive">
+          {error}
+        </div>
+        <Button variant="outline" onClick={refetch}>Try again</Button>
+      </div>
+    );
+  }
   if (!contactsArray.length) return <div className="p-6">No contacts found.</div>;
 
   return (
@@ -70,7 +63,6 @@ export default function ContactsPage() {
               <TableHead className="whitespace-nowrap">Email</TableHead>
               <TableHead className="whitespace-nowrap">Phone Number</TableHead>
               <TableHead className="whitespace-nowrap">Subject</TableHead>
-              <TableHead className="whitespace-nowrap">Message</TableHead>
               <TableHead className="whitespace-nowrap">Status</TableHead>
               <TableHead className="whitespace-nowrap">Time</TableHead>
             </TableRow>
@@ -87,7 +79,6 @@ export default function ContactsPage() {
                 <TableCell>{contact.email}</TableCell>
                 <TableCell>{contact.phoneNumber}</TableCell>
                 <TableCell>{contact.subject}</TableCell>
-                <TableCell>{contact.message}</TableCell>
                 <TableCell>{contact.status}</TableCell>
                 <TableCell>{new Date(contact.createdAt).toLocaleString()}</TableCell>
               </TableRow>
