@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/lib/authContext";
+import { useAuth } from "@/lib/auth-context";
 import api from "@/lib/api";
 
 export default function Home() {

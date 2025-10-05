@@ -5,7 +5,7 @@ import { RecentLoans } from './recent-loans';
 import { LoanTermsChart } from './loan-terms-charts';
 import { DollarSign, Users, Building } from 'lucide-react';
 import Image from 'next/image';
-import { useAuth } from "@/lib/authContext";
+import { useAuth } from "@/lib/auth-context";
 import { useEffect } from "react";
 import { useRouter } from 'next/navigation';
 export default function DashboardPage() {

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useContacts } from '@/hooks/useContacts';
+import { useContacts } from '@/hooks/use-contacts';
 import type { Contact } from '@/types/contact';
 import Loading from '@/components/loading';
 

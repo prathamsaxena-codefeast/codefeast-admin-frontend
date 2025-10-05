@@ -1,7 +1,7 @@
 "use client";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/lib/authContext";
+import { AuthProvider } from "@/lib/auth-context";
 import { AppSidebar } from "@/components/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { ThemeProvidersContext } from "@/provider/theme-provider";

@@ -6,7 +6,7 @@ import { useTheme } from 'next-themes';
 import { Moon, Sun, LogOut } from 'lucide-react';
 import { checkRoute } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
-import { useAuth } from '@/lib/authContext';
+import { useAuth } from '@/lib/auth-context';
 import roles from '@/constants/roles.json';
 
 export function Header() {

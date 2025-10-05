@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Filter } from 'lucide-react';
-import { useNewsletterSubscribers } from '@/hooks/useNewsletterSubscribers';
+import { useNewsletterSubscribers } from '@/hooks/use-newsletter-subscribers';
 
 export default function NewsLetter() {
   const { subscribers, loading, error } = useNewsletterSubscribers();
