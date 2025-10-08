@@ -3,11 +3,10 @@
 import * as React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Mail, Users, UserPlus } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { sidebarData } from '@/data/static-data';
+import sidebarConfig from '@/constants/sidebar-items.json';
 import {
-  
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
@@ -58,7 +57,14 @@ export function AppSidebar() {
           <SidebarGroupLabel>{isCollapsed ? '' : 'Leads'}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {sidebarData.lead.map((item) => (
+              {sidebarConfig.menuItems.map((item) => {
+                const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+                  Mail,
+                  Users,
+                  UserPlus,
+                } as const;
+                const Icon = iconMap[item.icon] ?? Users;
+                return (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
@@ -69,12 +75,13 @@ export function AppSidebar() {
                     }`}
                   >
                     <Link href={item.url} className="flex items-center gap-2">
-                      <item.icon className="h-5 w-5 text-muted-foreground" />
+                      <Icon className="h-5 w-5 text-muted-foreground" />
                       {!isCollapsed && <span className="truncate">{item.title}</span>}
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              ))}
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

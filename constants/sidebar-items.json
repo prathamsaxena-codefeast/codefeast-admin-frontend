@@ -9,6 +9,16 @@
       "title": "Contacts",
       "url": "/contacts",
       "icon": "Users"
+    },
+    {
+      "title": "Candidate Onboarding",
+      "url": "/candidate-onboarding",
+      "icon": "UserPlus"
+    },
+    {
+      "title": "Candidates",
+      "url": "/candidates",
+      "icon": "Users"
     }
   ]
 }
