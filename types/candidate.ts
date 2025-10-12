@@ -41,4 +41,14 @@ export type Candidate = {
   updatedAt: string;
 };
 
+export type WizardStep =
+  | "personal"
+  | "contact"
+  | "resume"
+  | "experience"
+  | "projects"
+  | "review";
 
+export interface AddCandidateFormProps {
+  onSuccess?: () => void;
+}
