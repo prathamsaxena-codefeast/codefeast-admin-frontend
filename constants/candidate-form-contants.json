@@ -1,0 +1,49 @@
+{
+  "contactForm": [
+    {
+      "key": "email",
+      "label": "Email",
+      "placeholder": "name@example.com",
+      "type": "email"
+    },
+    {
+      "key": "phoneNumber",
+      "label": "Phone number",
+      "placeholder": "e.g., +1 555 123 4567",
+      "type": "text"
+    },
+    {
+      "key": "address",
+      "label": "Address",
+      "placeholder": "Street, City, Country",
+      "type": "text"
+    },
+    {
+      "key": "resumeLink",
+      "label": "Resume link",
+      "placeholder": "e.g., Google Drive or portfolio URL",
+      "type": "text"
+    }
+  ],
+  "personalForm": [
+    {
+      "key": "firstName",
+      "label": "First name",
+      "placeholder": "e.g., Jane",
+      "type": "text"
+    },
+    {
+      "key": "lastName",
+      "label": "Last name",
+      "placeholder": "e.g., Doe",
+      "type": "text"
+    },
+    {
+      "key": "age",
+      "label": "Age",
+      "placeholder": "e.g., 28",
+      "type": "number"
+    }
+  ],
+  "emailRegex": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
+}

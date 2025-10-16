@@ -5,15 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import api from "@/lib/api";
-import { WizardStep, AddCandidateFormProps } from "@/types/candidate";
+import {
+  WizardStep,
+  AddCandidateFormProps,
+  CandidateFormType,
+} from "@/types/candidate";
 import Stepper from "@/components/stepper";
-import { personalForm } from "@/constants/candidate-form-contants";
-import { contactForm } from "@/constants/candidate-form-contants";
+import candidateFormData from "@/constants/candidate-form-contants.json";
 import { useCandidateForm } from "@/hooks/use-candidate-form";
-import ResumeSummarySkillsSection from "@/components/candidate/resume-summary-skills";
-import ExperienceEditorSection from "@/components/candidate/experience-editor";
-import ProjectsEditorSection from "@/components/candidate/projects-editor";
-import { EMAIL_REGEX } from "@/constants/candidate-form-contants";
+import ResumeSummarySkillsSection from "@/components/candidate-onboarding/resume-summary-skills";
+import ExperienceEditorSection from "@/components/candidate-onboarding/experience-editor";
+import ProjectsEditorSection from "@/components/candidate-onboarding/projects-editor";
 
 export default function AddCandidateForm({ onSuccess }: AddCandidateFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,7 +24,11 @@ export default function AddCandidateForm({ onSuccess }: AddCandidateFormProps) {
   const [showErrors, setShowErrors] = useState(false);
   const { form, setForm, resetForm } = useCandidateForm();
 
-  const emailRegex = EMAIL_REGEX;
+  //Coming from constant file, re-typing into Regex from string.
+  const emailRegex = new RegExp(candidateFormData.emailRegex);
+
+  const personalForm = candidateFormData.personalForm as CandidateFormType[];
+  const contactForm = candidateFormData.contactForm as CandidateFormType[];
 
   const stepOrder: WizardStep[] = [
     "personal",

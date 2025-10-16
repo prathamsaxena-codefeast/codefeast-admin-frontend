@@ -52,3 +52,10 @@ export type WizardStep =
 export interface AddCandidateFormProps {
   onSuccess?: () => void;
 }
+
+export interface CandidateFormType {
+  key: string;
+  label: string;
+  placeholder: string;
+  type: string;
+}
