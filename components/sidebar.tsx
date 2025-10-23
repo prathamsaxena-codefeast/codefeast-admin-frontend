@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { ChevronLeft, ChevronRight, Mail, Users, UserPlus } from 'lucide-react';
-import { usePathname } from 'next/navigation';
-import sidebarConfig from '@/constants/sidebar-items.json';
+import * as React from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight, Mail, Users, UserPlus } from "lucide-react";
+import { usePathname } from "next/navigation";
+import sidebarConfig from "@/constants/sidebar-items.json";
 import {
   SidebarContent,
   SidebarGroup,
@@ -15,7 +15,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@/components/ui/sidebar';
+} from "@/components/ui/sidebar";
 
 export function AppSidebar() {
   const [isCollapsed, setIsCollapsed] = React.useState(false);
@@ -24,7 +24,7 @@ export function AppSidebar() {
   return (
     <div
       className={`h-full border-r bg-background transition-all duration-300 ${
-        isCollapsed ? 'w-16' : 'w-64'
+        isCollapsed ? "w-16" : "w-64"
       }`}
     >
       <SidebarHeader>
@@ -54,32 +54,37 @@ export function AppSidebar() {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>{isCollapsed ? '' : 'Leads'}</SidebarGroupLabel>
+          <SidebarGroupLabel>{isCollapsed ? "" : "Leads"}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {sidebarConfig.menuItems.map((item) => {
-                const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+                const iconMap: Record<
+                  string,
+                  React.ComponentType<{ className?: string }>
+                > = {
                   Mail,
                   Users,
                   UserPlus,
                 } as const;
                 const Icon = iconMap[item.icon] ?? Users;
                 return (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors hover:bg-accent ${
-                      pathname === item.url
-                        ? 'bg-accent text-accent-foreground font-medium'
-                        : ''
-                    }`}
-                  >
-                    <Link href={item.url} className="flex items-center gap-2">
-                      <Icon className="h-5 w-5 text-muted-foreground" />
-                      {!isCollapsed && <span className="truncate">{item.title}</span>}
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors hover:bg-accent ${
+                        pathname === item.url
+                          ? "bg-accent text-accent-foreground font-medium"
+                          : ""
+                      }`}
+                    >
+                      <Link href={item.url} className="flex items-center gap-2">
+                        <Icon className="h-5 w-5 text-muted-foreground" />
+                        {!isCollapsed && (
+                          <span className="truncate">{item.title}</span>
+                        )}
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
                 );
               })}
             </SidebarMenu>
