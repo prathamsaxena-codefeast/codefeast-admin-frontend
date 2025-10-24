@@ -4,7 +4,7 @@ const SERVER_AUTH = process.env.SERVER_AUTH;
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: `/api`,
 });
 
 api.interceptors.request.use(
@@ -18,7 +18,7 @@ export const backendApi = axios.create({
   baseURL: `${API_BASE_URL}/api`,
   headers: {
     "Content-Type": "application/json",
-  }
+  },
 });
 
 backendApi.interceptors.request.use(
