@@ -120,3 +120,180 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  /* Custom animations for login page */
+  @keyframes float-slow {
+    0%, 100% {
+      transform: translateY(0px) translateX(0px) rotate(0deg);
+    }
+    33% {
+      transform: translateY(-20px) translateX(10px) rotate(1deg);
+    }
+    66% {
+      transform: translateY(10px) translateX(-5px) rotate(-1deg);
+    }
+  }
+
+  @keyframes float-reverse {
+    0%, 100% {
+      transform: translateY(0px) translateX(0px) rotate(0deg);
+    }
+    33% {
+      transform: translateY(20px) translateX(-10px) rotate(-1deg);
+    }
+    66% {
+      transform: translateY(-10px) translateX(5px) rotate(1deg);
+    }
+  }
+
+  @keyframes aurora-wave {
+    0%, 100% {
+      transform: translateX(-100%) skewX(-15deg);
+    }
+    50% {
+      transform: translateX(100%) skewX(15deg);
+    }
+  }
+
+  @keyframes code-glow {
+    0%, 100% {
+      opacity: 0.1;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+    }
+    50% {
+      opacity: 0.3;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+  }
+
+  @keyframes gradient-move {
+    0%, 100% {
+      transform: translateX(-100%) skewX(-15deg);
+    }
+    50% {
+      transform: translateX(100%) skewX(15deg);
+    }
+  }
+
+  @keyframes gradient-move-reverse {
+    0%, 100% {
+      transform: translateX(100%) skewX(15deg);
+    }
+    50% {
+      transform: translateX(-100%) skewX(-15deg);
+    }
+  }
+
+  @keyframes pulse-slow {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  .animate-float-slow {
+    animation: float-slow 8s ease-in-out infinite;
+  }
+
+  .animate-float-reverse {
+    animation: float-reverse 10s ease-in-out infinite;
+  }
+
+  .animate-aurora-wave {
+    animation: aurora-wave 20s linear infinite;
+  }
+
+  .animate-code-glow {
+    animation: code-glow 3s ease-in-out infinite;
+  }
+
+  .animate-gradient-move {
+    animation: gradient-move 15s linear infinite;
+  }
+
+  .animate-gradient-move-reverse {
+    animation: gradient-move-reverse 20s linear infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 3s ease-in-out infinite;
+  }
+
+  /* Glassmorphism utilities */
+  .glass-card {
+    backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  }
+
+  .glass-card-dark {
+    backdrop-filter: blur(16px);
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+
+  /* Enhanced button hover effects */
+  .btn-glow:hover {
+    box-shadow: 0 0 20px rgba(100, 116, 139, 0.4), 0 0 40px rgba(100, 116, 139, 0.2);
+  }
+
+  /* Dark mode form field enhancements */
+  .input-field-dark {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 -1px 1px rgba(255, 255, 255, 0.05);
+  }
+
+  .input-field-dark:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(148, 163, 184, 0.5);
+    box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Professional slate glow for active inputs */
+  .input-glow-active {
+    box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.3), 0 0 8px rgba(148, 163, 184, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Enhanced glassmorphism card */
+  .glass-card-enhanced {
+    backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-card-enhanced::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .glass-card-enhanced::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+  }
+
+  /* Typewriter cursor */
+  .typewriter-cursor::after {
+    content: '|';
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+}

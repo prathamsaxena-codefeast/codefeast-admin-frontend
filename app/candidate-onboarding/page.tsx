@@ -15,7 +15,9 @@ export default function CandidateOnboardingPage() {
           <p className="text-sm text-muted-foreground">View all candidates and their details.</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button onClick={() => setIsDialogOpen(true)}>Add Candidate</Button>
+          <Button onClick={() => setIsDialogOpen((v) => !v)}>
+            {isDialogOpen ? "Close" : "Add Candidate"}
+          </Button>
         </div>
       </div>
 
