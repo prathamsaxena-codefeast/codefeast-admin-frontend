@@ -7,7 +7,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { ThemeProvidersContext } from "@/provider/theme-provider";
 import { Header } from "@/components/header";
 import { usePathname } from "next/navigation";
-
+import { Toaster } from "@/components/ui/sonner";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -36,7 +36,10 @@ export default function RootLayout({
           <ThemeProvidersContext>
             <SidebarProvider>
               {hideSidebarAndHeader ? (
-                <main className="w-full h-screen">{children}</main>
+                <>
+                  <main className="w-full h-screen">{children}</main>
+                  <Toaster />
+                </>
               ) : (
                 <div className="flex w-full h-screen">
                   {/* Sidebar */}
