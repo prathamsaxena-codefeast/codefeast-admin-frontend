@@ -29,6 +29,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Eye, EyeOff } from "lucide-react";
 
 export function RoleChangeDrawer({
   user,
@@ -48,6 +49,7 @@ export function RoleChangeDrawer({
   const [newPassword, setNewPassword] = useState("");
   const [isResettingPassword, setIsResettingPassword] = useState(false);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
 
   if (user.email === currentUser.email) {
     return (
@@ -56,6 +58,10 @@ export function RoleChangeDrawer({
       </span>
     );
   }
+
+  const togglePasswordVisibility = () => {
+    setShowNewPassword((prev) => !prev);
+  };
 
   const handleSave = () => {
     let hasChanges = false;
@@ -76,6 +82,7 @@ export function RoleChangeDrawer({
 
     setIsResettingPassword(false);
     setOpen(false);
+    setShowNewPassword(false);
   };
 
   const handleOpenChange = (isOpen: boolean) => {
@@ -85,6 +92,7 @@ export function RoleChangeDrawer({
       setNewPassword("");
       setIsResettingPassword(false);
       setIsDeleteAlertOpen(false);
+      setShowNewPassword(false);
     }
     setOpen(isOpen);
   };
@@ -152,14 +160,34 @@ export function RoleChangeDrawer({
                   >
                     Reset Password
                   </label>
-                  <Input
-                    id="new-password"
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="Enter new password..."
-                    className="w-full mt-2"
-                  />
+                  <div className="relative w-full mt-2">
+                    <Input
+                      id="new-password"
+                      type={showNewPassword ? "text" : "password"}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Enter new password..."
+                      className="w-full pr-10"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-0 top-0 h-full px-3 py-1 hover:bg-transparent"
+                      onClick={togglePasswordVisibility}
+                      aria-label={
+                        showNewPassword
+                          ? "Hide new password"
+                          : "Show new password"
+                      }
+                    >
+                      {showNewPassword ? (
+                        <EyeOff className="h-4 w-4 text-gray-500" />
+                      ) : (
+                        <Eye className="h-4 w-4 text-gray-500" />
+                      )}
+                    </Button>
+                  </div>
                 </>
               ) : (
                 <Button
@@ -171,7 +199,6 @@ export function RoleChangeDrawer({
                 </Button>
               )}
             </div>
-
             <Button
               className="w-full"
               onClick={handleSave}

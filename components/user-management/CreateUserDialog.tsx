@@ -22,6 +22,11 @@ import {
 import api from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { User } from "@/types/user";
+import { Eye, EyeOff } from "lucide-react";
+import {
+  emailRegex as emailRegexString,
+  passwordRegex as passwordRegexString,
+} from "@/constants/candidate-form-contants.json";
 
 interface CreateUserDialogProps {
   onUserCreated: () => void; // This will be the `refetch` function from useUsers
@@ -30,7 +35,10 @@ interface CreateUserDialogProps {
 export function CreateUserDialog({ onUserCreated }: CreateUserDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
+  const emailRegex = new RegExp(emailRegexString);
+  const passwordRegex = new RegExp(passwordRegexString);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -38,8 +46,50 @@ export function CreateUserDialog({ onUserCreated }: CreateUserDialogProps) {
     role: "ta" as User["role"],
   });
 
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const validate = () => {
+    let newErrors = { name: "", email: "", password: "" };
+    let isValid = true;
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required.";
+      isValid = false;
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required.";
+      isValid = false;
+    } else if (!emailRegex.test(formData.email.trim())) {
+      newErrors.email =
+        "Please enter a valid email address (e.g., user@domain.com).";
+      isValid = false;
+    }
+
+    if (!formData.password) {
+      newErrors.password = "Password is required.";
+      isValid = false;
+    } else if (!passwordRegex.test(formData.password)) {
+      newErrors.password =
+        "Password must be at least 8 characters and contain at least one uppercase letter and one special character.";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+    setErrors({ ...errors, [e.target.id]: "" });
   };
 
   const handleRoleChange = (value: User["role"]) => {
@@ -47,6 +97,12 @@ export function CreateUserDialog({ onUserCreated }: CreateUserDialogProps) {
   };
 
   const handleSubmit = async () => {
+    if (!validate()) {
+      toast.error("Validation Error", {
+        description: "Please correct the errors in the form.",
+      });
+      return;
+    }
     setIsLoading(true);
     try {
       const response = await api.post("/auth/register", formData);
@@ -57,6 +113,7 @@ export function CreateUserDialog({ onUserCreated }: CreateUserDialogProps) {
       onUserCreated();
       setIsOpen(false);
       setFormData({ name: "", email: "", password: "", role: "ta" });
+      setShowPassword(false);
     } catch (err: any) {
       toast.error("Error creating user", {
         description: err.response?.data?.message || err.message,
@@ -91,30 +148,57 @@ export function CreateUserDialog({ onUserCreated }: CreateUserDialogProps) {
               placeholder="John Doe"
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="email" className="text-right">
+          <div className="grid grid-cols-4 items-start gap-4">
+            <Label htmlFor="email" className="text-right mt-2">
               Email
             </Label>
-            <Input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="col-span-3"
-              placeholder="john@example.com"
-            />
+            <div className="col-span-3">
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="john@example.com"
+              />
+              {errors.email && (
+                <p className="text-sm font-medium text-red-500 mt-1">
+                  {errors.email}
+                </p>
+              )}
+            </div>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="password" className="text-right">
               Password
             </Label>
-            <Input
-              id="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="col-span-3"
-            />
+            <div className="col-span-3 relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                value={formData.password}
+                onChange={handleChange}
+                className="pr-10"
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="absolute right-0 top-0 h-full px-3 py-1 hover:bg-transparent"
+                onClick={togglePasswordVisibility}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4 text-gray-500" />
+                ) : (
+                  <Eye className="h-4 w-4 text-gray-500" />
+                )}
+              </Button>
+              {errors.password && (
+                <p className="text-sm font-medium text-red-500 mt-1">
+                  {errors.password}
+                </p>
+              )}
+            </div>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="role" className="text-right">
@@ -125,7 +209,7 @@ export function CreateUserDialog({ onUserCreated }: CreateUserDialogProps) {
                 <SelectValue placeholder="Select a role" />
               </SelectTrigger>
               <SelectContent>
-                {/* Add any other roles you have */}
+                {/* We add new roles here for display */}
                 <SelectItem value="ta">TA</SelectItem>
                 <SelectItem value="admin">Admin</SelectItem>
               </SelectContent>
