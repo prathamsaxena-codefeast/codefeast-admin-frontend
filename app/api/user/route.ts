@@ -31,7 +31,7 @@ export async function POST(request: Request) {
   } catch (error) {
     if (isAxiosError(error) && error.response) {
       return NextResponse.json(
-        { message: error.response.data?.message || "Failed to add candidate" },
+        { message: error.response.data?.message || "Failed to edit the role." },
         { status: error.response.status }
       );
     }

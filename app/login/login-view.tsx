@@ -6,8 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
-import { AxiosError } from "axios";
+import { Axios, AxiosError } from "axios";
 import Link from "next/link";
+import { ForgotPasswordModal } from "@/components/reset-password";
+import { useToast } from "@/hooks/use-toast";
 
 export function LoginView() {
   const { login } = useAuth();
@@ -16,6 +18,9 @@ export function LoginView() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+  const [forgotPasswordScreen, setForgotPasswordScreen] =
+    useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,8 +33,8 @@ export function LoginView() {
 
     try {
       setIsLoading(true);
-      await login(email, password);
-    } catch (err) {
+      const response: any = await login(email, password);
+    } catch (err: any) {
       let message = "Something went wrong. Please try again.";
 
       if (err instanceof AxiosError && err.response?.data?.message) {
@@ -37,18 +42,24 @@ export function LoginView() {
       } else if (err instanceof Error) {
         message = err.message;
       }
-
+      toast.error(err.response.data.message);
       setError(message);
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleForgotPassword = async () => {
+    setForgotPasswordScreen(true);
+  };
+
   return (
     <div className="w-full max-w-md">
       <div className="rounded-2xl border bg-card text-card-foreground shadow-xl p-8 md:p-10">
         <div className="space-y-2 text-center mb-6">
-          <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">Sign in</h1>
+          <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">
+            Sign in
+          </h1>
           <p className="text-sm md:text-base text-muted-foreground">
             Enter your credentials to access the dashboard
           </p>
@@ -105,13 +116,22 @@ export function LoginView() {
                 className="h-4 w-4 rounded border-border"
                 disabled={isLoading}
               />
-              <Label htmlFor="remember" className="text-sm font-medium text-muted-foreground">
+              <Label
+                htmlFor="remember"
+                className="text-sm font-medium text-muted-foreground"
+              >
                 Remember me
               </Label>
             </div>
-            <Link href="#" className="text-sm font-medium text-primary hover:text-primary/90">
+            <Button
+              type="button"
+              variant="link"
+              onClick={handleForgotPassword}
+              className="p-0 text-sm font-medium text-primary hover:text-primary/90"
+              disabled={isLoading}
+            >
               Forgot password?
-            </Link>
+            </Button>
           </div>
 
           <Button
@@ -128,15 +148,21 @@ export function LoginView() {
               "Log In"
             )}
           </Button>
-
           <div className="text-center text-sm text-muted-foreground">
             Don&apos;t have an account?
-            <Link href="/signup" className="ml-1 font-medium text-primary hover:text-primary/90">
+            <Link
+              href="/signup"
+              className="ml-1 font-medium text-primary hover:text-primary/90"
+            >
               Sign up
             </Link>
           </div>
         </form>
       </div>
+      <ForgotPasswordModal
+        open={forgotPasswordScreen}
+        onOpenChange={setForgotPasswordScreen}
+      />
     </div>
   );
 }
