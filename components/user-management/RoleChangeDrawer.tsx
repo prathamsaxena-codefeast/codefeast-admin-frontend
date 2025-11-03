@@ -30,6 +30,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Eye, EyeOff } from "lucide-react";
+import { passwordRegex as passwordRegexString } from "@/constants/candidate-form-contants.json";
+import { useToast } from "@/hooks/use-toast";
 
 export function RoleChangeDrawer({
   user,
@@ -50,7 +52,9 @@ export function RoleChangeDrawer({
   const [isResettingPassword, setIsResettingPassword] = useState(false);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
-
+  const [passwordError, setPasswordError] = useState("");
+  const passwordRegex = new RegExp(passwordRegexString);
+  const { toast } = useToast();
   if (user.email === currentUser.email) {
     return (
       <span className="text-gray-400 dark:text-gray-500 text-sm">
@@ -58,6 +62,26 @@ export function RoleChangeDrawer({
       </span>
     );
   }
+
+  const validate = (password: string) => {
+    let newError = "";
+    let isValid = true;
+
+    // Check the 'password' argument, not the 'passwordError' state
+    if (!password) {
+      newError = "Password is required.";
+      isValid = false;
+      // Check the 'password' argument here too
+    } else if (!passwordRegex.test(password)) {
+      newError =
+        "Password must be at least 8 characters and contain at least one uppercase letter and one special character.";
+      isValid = false;
+    }
+
+    // This part is correct - it sets the error state
+    setPasswordError(newError);
+    return isValid;
+  };
 
   const togglePasswordVisibility = () => {
     setShowNewPassword((prev) => !prev);
@@ -72,6 +96,13 @@ export function RoleChangeDrawer({
     }
 
     if (newPassword.trim() !== "") {
+      if (!validate(newPassword.trim())) {
+        toast.error("Validation Error", {
+          description:
+            "Password must be at least 8 characters and contain at least one uppercase letter and one special character.",
+        });
+        return;
+      }
       onPasswordReset(user._id, newPassword.trim());
       hasChanges = true;
     }
