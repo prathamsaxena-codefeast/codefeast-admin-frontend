@@ -1,6 +1,7 @@
 "use client";
 import { RoleChangeDrawer } from "@/components/user-management/RoleChangeDrawer";
 import { useUsers } from "@/hooks/use-users";
+import { CreateUserDialog } from "@/components/user-management/CreateUserDialog";
 import api from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { User } from "@/types/user";
@@ -20,27 +21,74 @@ import {
   ChevronRight,
   ChevronLast,
 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function UserManagementPage() {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [currentUser, setCurrentUser] = useState<User | null>();
   const { users, loading, refetch } = useUsers();
 
   useEffect(() => {
     if (!user) return;
-    setCurrentUser(user as User);
+    setCurrentUser(user as unknown as User);
   }, [user]);
 
-  const usersArray = useMemo(() => {
+  let usersArray = useMemo(() => {
     return Array.isArray(users) ? users : [];
   }, [users]);
 
-  const handleRoleChange = async (userId: string, newRole: User["role"]) => {
+  const handleRoleChange = async (
+    userId: User["_id"],
+    newRole: User["role"]
+  ) => {
     try {
       const response = await api.post("/user", { newRole, userId });
+      toast.success("Role changed successfully", {
+        description: response.data.message,
+      });
+
       //refetching the whhole users data.
       refetch();
-    } catch (err: any) {}
+    } catch (err: any) {
+      toast.error("Error while resetting the password", {
+        description: err.message,
+      });
+    }
+  };
+
+  const handlePasswordChange = async (
+    userId: User["_id"],
+    newPassword: string
+  ) => {
+    try {
+      const response = await api.post("/user/reset-password", {
+        userId,
+        newPassword,
+      });
+      toast.success("Password reset successfully", {
+        description: response.data.message,
+      });
+    } catch (err: any) {
+      toast.error("Error while resetting the password", {
+        description: err.message,
+      });
+    }
+  };
+
+  const handleDeleteUser = async (userId: User["_id"]) => {
+    try {
+      const response = await api.post("/user/delete-user", { userId });
+
+      toast.success("User removed successfully", {
+        description: response.data.message,
+      });
+      refetch();
+    } catch (err: any) {
+      toast.error("Error while resetting the password", {
+        description: err.message,
+      });
+    }
   };
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -60,32 +108,21 @@ export default function UserManagementPage() {
     );
   }
 
-  if (!currentUser || currentUser.role !== "admin") {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#020618]">
-        <div className="bg-white/80 dark:bg-[#020618]/80 backdrop-blur-md p-8 rounded-xl shadow-2xl text-center border border-gray-200 dark:border-gray-700">
-          <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-2">
-            Access Denied
-          </h1>
-          <p className="text-gray-500 dark:text-gray-400">
-            You don't have permission to access this page.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#020618] py-10 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Header (from your original code) */}
         <div className="mb-10">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            User Management
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
-            Manage user roles and permissions
-          </p>
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                User Management
+              </h1>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">
+                Manage user roles and permissions
+              </p>
+            </div>
+            <CreateUserDialog onUserCreated={refetch} />
+          </div>
         </div>
 
         <div className="rounded-md border bg-white dark:bg-[#020618] border-gray-200 dark:border-gray-700">
@@ -106,12 +143,9 @@ export default function UserManagementPage() {
                 >
                   <TableCell>
                     <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-500 text-white font-semibold">
-                        {user.email.charAt(0).toUpperCase()}
-                      </div>
-                      <div className="ml-4 text-sm font-medium text-gray-900 dark:text-gray-100">
-                        {user.username}
-                        {user.email === currentUser.email && (
+                      <div className="ml-2 py-1 text-sm font-medium text-gray-900 dark:text-gray-100">
+                        {user.name}
+                        {user.email === currentUser!.email && (
                           <span className="ml-2 bg-blue-500/20 text-blue-500 text-xs font-medium px-2 py-0.5 rounded-md">
                             You
                           </span>
@@ -119,20 +153,12 @@ export default function UserManagementPage() {
                       </div>
                     </div>
                   </TableCell>
-
                   <TableCell className="text-sm text-gray-600 dark:text-gray-400">
                     {user.email}
                   </TableCell>
-
                   <TableCell>
                     <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${
-                        user.role === "admin"
-                          ? "bg-purple-500/20 text-purple-400"
-                          : user.role === "ta"
-                          ? "bg-green-500/20 text-green-400"
-                          : "bg-gray-500/20 text-gray-400"
-                      }`}
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize`}
                     >
                       {user.role}
                     </span>
@@ -141,8 +167,10 @@ export default function UserManagementPage() {
                   <TableCell>
                     <RoleChangeDrawer
                       user={user}
-                      currentUser={currentUser}
+                      currentUser={currentUser!}
                       onRoleChange={handleRoleChange}
+                      onPasswordReset={handlePasswordChange}
+                      onDeleteUser={handleDeleteUser}
                     />
                   </TableCell>
                 </TableRow>

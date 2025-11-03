@@ -16,10 +16,23 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import adminRoutes from "@/constants/sidebar-admin-items.json";
+import { useAuth } from "@/lib/auth-context";
 
 export function AppSidebar() {
   const [isCollapsed, setIsCollapsed] = React.useState(false);
   const pathname = usePathname();
+  const { user } = useAuth();
+  const isAdmin = user?.role === "admin";
+
+  const filteredMenuItems = sidebarConfig.menuItems.filter((item) => {
+    const isItemAdminOnly = adminRoutes.adminTitles.includes(item.title);
+    if (isItemAdminOnly) {
+      return isAdmin;
+    }
+
+    return true;
+  });
 
   return (
     <div
@@ -57,7 +70,7 @@ export function AppSidebar() {
           <SidebarGroupLabel>{isCollapsed ? "" : "Leads"}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {sidebarConfig.menuItems.map((item) => {
+              {filteredMenuItems.map((item) => {
                 const iconMap: Record<
                   string,
                   React.ComponentType<{ className?: string }>

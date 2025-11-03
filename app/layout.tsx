@@ -38,17 +38,15 @@ export default function RootLayout({
               {hideSidebarAndHeader ? (
                 <>
                   <main className="w-full h-screen">{children}</main>
-                  <Toaster />
+                  <Toaster richColors closeButton position="top-center" />
                 </>
               ) : (
                 <div className="flex w-full h-screen">
-                  {/* Sidebar */}
                   <AppSidebar />
-
-                  {/* Main Content */}
                   <div className="flex-1 flex flex-col overflow-hidden">
                     <Header />
                     <main className="flex-1 overflow-y-auto">{children}</main>
+                    <Toaster richColors closeButton position="top-center" />
                   </div>
                 </div>
               )}
