@@ -139,7 +139,7 @@ export function RoleChangeDrawer({
       <Button
         variant="default"
         onClick={() => setOpen(true)}
-        className="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-[#1e2633] dark:to-[#1b222e] text-gray-800 dark:text-gray-100 px-4 py-1 rounded-md text-sm font-medium shadow-sm hover:shadow-md transition-all"
+        className="bg-gradient-to-br from-muted to-muted dark:from-secondary dark:to-secondary text-foreground px-4 py-1 rounded-md text-sm font-medium shadow-sm hover:shadow-md transition-all"
       >
         Take Actions
       </Button>
@@ -147,23 +147,23 @@ export function RoleChangeDrawer({
       <Sheet open={open} onOpenChange={handleOpenChange}>
         <SheetContent
           side="right"
-          className="w-[340px] sm:w-[400px] border-l border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-[#0d1117]/90 backdrop-blur-xl"
+          className="w-[340px] sm:w-[400px] border-l border-border bg-card/90 backdrop-blur-xl"
         >
           <SheetHeader>
             <SheetTitle className="text-xl font-semibold">Edit User</SheetTitle>
-            <SheetDescription className="text-gray-500 dark:text-gray-400">
+
+            <SheetDescription className="text-muted-foreground">
               Update role or reset password for{" "}
-              <span className="font-medium text-gray-800 dark:text-gray-100">
-                {user.name}
-              </span>
+              <span className="font-medium text-foreground">{user.name}</span>
             </SheetDescription>
           </SheetHeader>
 
           <div className="mt-6 space-y-6">
             <div>
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="text-sm font-medium text-foreground">
                 Change Role
               </label>
+
               <Select
                 value={selectedRole}
                 onValueChange={(selectedRole: string) =>
@@ -173,24 +173,24 @@ export function RoleChangeDrawer({
                 <SelectTrigger className="w-full mt-2">
                   <SelectValue placeholder="Choose a role" />
                 </SelectTrigger>
+
                 <SelectContent>
                   <SelectItem value="admin">Admin</SelectItem>
                   <SelectItem value="ta">TA</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-
             <Separator />
-
             <div>
               {isResettingPassword ? (
                 <>
                   <label
                     htmlFor="new-password"
-                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                    className="text-sm font-medium text-foreground"
                   >
                     Reset Password
                   </label>
+
                   <div className="relative w-full mt-2">
                     <Input
                       id="new-password"
@@ -200,6 +200,7 @@ export function RoleChangeDrawer({
                       placeholder="Enter new password..."
                       className="w-full pr-10"
                     />
+
                     <Button
                       type="button"
                       variant="ghost"
@@ -213,9 +214,9 @@ export function RoleChangeDrawer({
                       }
                     >
                       {showNewPassword ? (
-                        <EyeOff className="h-4 w-4 text-gray-500" />
+                        <EyeOff className="h-4 w-4 text-muted-foreground" />
                       ) : (
-                        <Eye className="h-4 w-4 text-gray-500" />
+                        <Eye className="h-4 w-4 text-muted-foreground" />
                       )}
                     </Button>
                   </div>
@@ -230,6 +231,7 @@ export function RoleChangeDrawer({
                 </Button>
               )}
             </div>
+
             <Button
               className="w-full"
               onClick={handleSave}
@@ -238,9 +240,7 @@ export function RoleChangeDrawer({
               Save Changes
             </Button>
           </div>
-
           <Separator />
-
           <div>
             <Button
               variant="destructive"
@@ -258,20 +258,19 @@ export function RoleChangeDrawer({
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete{" "}
-                  <span className="font-medium text-gray-800 dark:text-gray-100">
+                  This action cannot be undone. This will permanently delete
+                  <span className="font-medium text-foreground">
                     {user.name}
                   </span>
                   's account.
                 </AlertDialogDescription>
               </AlertDialogHeader>
+
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  className="bg-[#9f4246] hover:bg-[#ba595e] text-white"
-                  onClick={handleConfirmDelete}
-                >
+                <AlertDialogAction onClick={handleConfirmDelete}>
                   Delete
                 </AlertDialogAction>
               </AlertDialogFooter>

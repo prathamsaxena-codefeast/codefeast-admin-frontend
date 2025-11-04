@@ -161,7 +161,7 @@ export function CreateUserDialog({ onUserCreated }: CreateUserDialogProps) {
                 placeholder="john@example.com"
               />
               {errors.email && (
-                <p className="text-sm font-medium text-red-500 mt-1">
+                <p className="text-sm font-medium text-destructive mt-1">
                   {errors.email}
                 </p>
               )}
@@ -189,14 +189,14 @@ export function CreateUserDialog({ onUserCreated }: CreateUserDialogProps) {
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-4 w-4 text-gray-500" />
+                    <EyeOff className="h-4 w-4 text-muted-foreground" />
                   ) : (
-                    <Eye className="h-4 w-4 text-gray-500" />
+                    <Eye className="h-4 w-4 text-muted-foreground" />
                   )}
                 </Button>
               </div>
               {errors.password && (
-                <p className="text-sm font-medium text-red-500 mt-1">
+                <p className="text-sm font-medium text-destructive mt-1">
                   {errors.password}
                 </p>
               )}

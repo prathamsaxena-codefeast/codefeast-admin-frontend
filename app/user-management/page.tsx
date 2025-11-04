@@ -102,22 +102,22 @@ export default function UserManagementPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#020618]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#020618] py-10 transition-colors duration-300">
+    <div className="min-h-screen bg-background py-10 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6">
         <div className="mb-10">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-3xl font-bold text-foreground">
                 User Management
               </h1>
-              <p className="text-gray-600 dark:text-gray-400 mt-2">
+              <p className="text-muted-foreground mt-2">
                 Manage user roles and permissions
               </p>
             </div>
@@ -125,7 +125,7 @@ export default function UserManagementPage() {
           </div>
         </div>
 
-        <div className="rounded-md border bg-white dark:bg-[#020618] border-gray-200 dark:border-gray-700">
+        <div className="rounded-md border bg-card border-border">
           <Table>
             <TableHeader>
               <TableRow>
@@ -137,23 +137,20 @@ export default function UserManagementPage() {
             </TableHeader>
             <TableBody>
               {paginatedUsers.map((user) => (
-                <TableRow
-                  key={user._id}
-                  className="hover:bg-gray-50 dark:hover:bg-[#1b222e]"
-                >
+                <TableRow key={user._id} className="hover:bg-muted">
                   <TableCell>
                     <div className="flex items-center">
-                      <div className="ml-2 py-1 text-sm font-medium text-gray-900 dark:text-gray-100">
+                      <div className="ml-2 py-1 text-sm font-medium text-foreground">
                         {user.name}
                         {user.email === currentUser!.email && (
-                          <span className="ml-2 bg-blue-500/20 text-blue-500 text-xs font-medium px-2 py-0.5 rounded-md">
+                          <span className="ml-2 bg-primary/20 text-primary text-xs font-medium px-2 py-0.5 rounded-md">
                             You
                           </span>
                         )}
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell className="text-sm text-gray-600 dark:text-gray-400">
+                  <TableCell className="text-sm text-muted-foreground">
                     {user.email}
                   </TableCell>
                   <TableCell>
@@ -180,12 +177,12 @@ export default function UserManagementPage() {
         </div>
 
         <div className="flex items-center justify-between px-2 py-4">
-          <div className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="text-sm text-muted-foreground">
             {paginatedUsers.length} of {usersArray.length} user(s) displayed.
           </div>
           <div className="flex items-center space-x-6 lg:space-x-8">
             <div className="flex items-center space-x-2">
-              <p className="text-sm font-medium text-gray-900 dark:text-white">
+              <p className="text-sm font-medium text-foreground">
                 Rows per page
               </p>
               <label htmlFor="rowsPerPage" className="sr-only">
@@ -198,17 +195,16 @@ export default function UserManagementPage() {
                   setRowsPerPage(Number(e.target.value));
                   setCurrentPage(1);
                 }}
-                className="h-8 w-[70px] rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#020618] px-3 py-1 text-sm text-gray-900 dark:text-white"
+                className="h-8 w-[70px] rounded-md border border-input bg-background px-3 py-1 text-sm text-foreground"
               >
                 <option value="10">10</option>
                 <option value="20">20</option>
-                <option value="30">30</option>
-                <option value="40">40</option>
+                <option value="30">30</option>Â <option value="40">40</option>
                 <option value="50">50</option>
               </select>
             </div>
 
-            <div className="flex w-[100px] items-center justify-center text-sm font-medium text-gray-900 dark:text-white">
+            <div className="flex w-[100px] items-center justify-center text-sm font-medium text-foreground">
               Page {currentPage} of {totalPages}
             </div>
 
