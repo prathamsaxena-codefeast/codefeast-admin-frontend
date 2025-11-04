@@ -1,0 +1,22 @@
+{
+  "jobTypes": ["Full-Time", "Contractual Fulltime", "Internship"],
+  "jobCategories": [
+    "Engineering",
+    "HR",
+    "Support",
+    "Design",
+    "Digital Marketing",
+    "Mktg",
+    "WebTips",
+    "Writ Lab",
+    "News Hacks"
+  ],
+  "experienceLevels": [
+    "Entry-level",
+    "Mid-level",
+    "Senior-level",
+    "Lead",
+    "Principal",
+    "Manager"
+  ]
+}
